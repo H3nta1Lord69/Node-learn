@@ -3,7 +3,8 @@ require('colors');
 const { inquirerMenu, 
         pause,
         readInput } = require('./helpers/inquirer');
-const { saveDb } = require('./helpers/saveFile');
+const { saveDb,
+        readDb } = require('./helpers/saveFile');
 const Tasks = require('./models/tasks');
 
 console.clear();
@@ -12,6 +13,13 @@ const main = async() => {
 
     let opt ='';
     const tasks = new Tasks();
+
+    const tasksDb = readDb();
+
+    if(tasksDb){
+        // Load tasks
+        tasks.loadTasks( tasksDb );
+    }
 
     do{
         // Print the menu
@@ -25,7 +33,7 @@ const main = async() => {
             break;
             case '2':
                 // Show taks
-                console.log( tasks.listArr );
+                tasks.completeList();
             break;
             case '3':
                 // Create
