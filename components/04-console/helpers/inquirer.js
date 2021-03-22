@@ -90,9 +90,83 @@ const readInput = async( message ) => {
 
 }
 
+const deleteListTasks = async( tasks = [] ) =>{
+
+    const choices = tasks.map( (task, i) => {
+
+        const idx = `${ i + 1 }.`.cyan;
+        return {
+            value: task.id,
+            name: `${ idx } ${ task.desc }`
+        }
+        
+    });
+
+    choices.unshift({
+        value: '0',
+        name: '0.'.cyan + 'Back'
+    });
+
+    const questions = [
+        {
+            type: 'list',
+            name: 'id',
+            message: 'Choose the one you want to delete',
+            choices
+        }
+    ]
+
+    const { id } = await inquirer.prompt(questions);
+    return id;
+
+}
+
+const confirm = async( message ) => {
+    const cQuestion = [
+        {
+            type: 'confirm',
+            name: 'ok',
+            message
+        }
+    ];
+
+    const { ok } = await inquirer.prompt(cQuestion);
+    return ok;
+
+}
+
+const showChecklist = async( tasks = [] ) =>{
+
+    const choices = tasks.map( (task, i) => {
+
+        const idx = `${ i + 1 }.`.cyan;
+        return {
+            value: task.id,
+            name: `${ idx } ${ task.desc }`,
+            checked: ( task.completed ) ? true : false
+        }
+        
+    });
+
+    const preguntas = [
+        {
+            type: 'checkbox',
+            name: 'ids',
+            message: 'Select the tasks',
+            choices
+        }
+    ]
+
+    const { ids } = await inquirer.prompt(preguntas);
+    return ids;
+
+}
+
 module.exports = {
     inquirerMenu,
     pause,
-    readInput
+    readInput,
+    deleteListTasks,
+    confirm,
+    showChecklist
 }
-
