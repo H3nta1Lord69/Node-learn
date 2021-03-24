@@ -1,6 +1,9 @@
+require('dotenv').config();
+
 const { inquirerMenu, 
         pause, 
-        readInput } = require("./helpers/inquirer");
+        readInput, 
+        listPlaces} = require("./helpers/inquirer");
 const Searchs = require("./models/searchs");
 
 
@@ -17,27 +20,43 @@ const main = async() => {
 
             case 1:
                 // Show message
-
-                const place = await readInput('City: ');
-                console.log(place);
-
+                const termSearch = await readInput('City: ');
+                
                 // Search places
-
+                const places = await search.city( termSearch );
+                
                 // Select the place from the search
+                const idSelected = await listPlaces(places);
+                if( idSelected === '0' ) continue;
 
-                // Data of the place, especifically the weather
+                const placeSelected = places.find( p => p.id === idSelected );
 
-                console.log('\nInformation of the city\n'.cyan);
-                console.log('City:', );
-                console.log('Lat:', );
-                console.log('Lng:', );
-                console.log('Temperature:', );
-                console.log('Min:', );
-                console.log('Max:', );
+                // Save in db
+                search.addHistory( placeSelected.name );
+
+                // Weather
+                const weather = await search.weatherPlace( placeSelected.lat, placeSelected.lng );
+
+                // Data of the place (especifically the weather)
+
+                console.clear();
+                console.log('\nInformation of the city\n'.cyan );
+                console.log('City:', placeSelected.name.cyan );
+                console.log('Lat:', placeSelected.lat );
+                console.log('Lng:', placeSelected.lng );
+                console.log('Temperature:', weather.temp );
+                console.log('Min:', weather.min );
+                console.log('Max:', weather.max );
+                console.log('Estado:', weather.desc.cyan );
 
             break;
 
-            case 1:
+            case 2:
+
+                search.historyCapital.forEach( (place, id) => {
+                    const idx = `${id + 1}. `.cyan;
+                    console.log(`${ idx }${place}`);
+                })         
 
             break;
 
