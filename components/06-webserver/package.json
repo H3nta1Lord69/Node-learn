@@ -1,0 +1,12 @@
+{
+  "name": "06-webserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": [],
+  "author": "Carlos Garcia (HentaiLord69)",
+  "license": "ISC"
+}
