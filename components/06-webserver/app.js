@@ -1,13 +1,41 @@
-const http = require('http');
+const express = require('express');
+const hbs = require('hbs')
 
-http.createServer( ( req, res ) => {
+const app = express();
+const port = 8080;
 
-    res.writeHead(200, { 'Content-Type': 'text/plain' } )
+// Handlebars
+app.set('view engine', 'hbs');
+hbs.registerPartials(__dirname + '/views/partials');
 
-    res.write('Hello there');
-    res.end();
+// Place static content
+app.use( express.static('public') )
 
-})
-.listen( 8080 );
+app.get( '/', ( req, res ) => {
+    res.render('home', {
+        name: 'Carlos Garcia',
+        tittle: 'Express app'
+    });
+});
 
-console.log('Available on ', 8080)
+app.get( '/generic', ( req, res ) => {
+    res.render('generic', {
+        name: 'Carlos Garcia',
+        tittle: 'Express app'
+    });
+});
+
+app.get( '/elements', ( req, res ) => {
+    res.render('elements', {
+        name: 'Carlos Garcia',
+        tittle: 'Express app'
+    });
+});
+
+app.get( '*', ( req, res ) => {
+    res.sendFile(__dirname + '/public/404.html');
+});
+
+app.listen(port, () => {
+    console.log(`App listening al http://localhost:${ port }`)
+});
