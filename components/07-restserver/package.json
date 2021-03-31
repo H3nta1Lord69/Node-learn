@@ -4,7 +4,7 @@
   "description": "REST Server",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js"
   },
   "keywords": [
     "Node",
@@ -17,6 +17,7 @@
   "author": "Carlos Garcia (H3nta1lord69)",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1"
   }
