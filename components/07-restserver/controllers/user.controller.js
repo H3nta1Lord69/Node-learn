@@ -34,15 +34,6 @@ const userPost = async(req, res = response) => {
     const { name, email, password, role } = req.body;
     const user = new User({ name, email, password, role });
 
-    // Verify trusty email
-    const emailExists = await User.findOne({ email });
-    if( emailExists ) {
-        return res.status(400).json({
-            error: 'The email already exists.'
-        });
-    }
-
-
     // Encrypt password
     const salt = bcryptjs.genSaltSync();
     user.password = bcryptjs.hashSync( password, salt );
@@ -51,7 +42,6 @@ const userPost = async(req, res = response) => {
     await user.save();
 
     res.json({
-        msg: 'Hello post - controller',
         user
     });
 
