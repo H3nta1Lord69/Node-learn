@@ -3,29 +3,40 @@ const bcryptjs = require('bcryptjs');
 
 const User = require('../models/user');
 
-const userGet = (req = request, res = response) => {
+const userGet = async(req = request, res = response) => {
 
-    const { q, name = 'No name', edad, page = 1, limit } = req.query;
+    const { limite = 5, desde = 0 } = req.query;
+    const condition = { active: true };
+
+    const [ total, users ] = await Promise.all([
+        User.countDocuments( condition ),
+        User.find( condition )
+            .skip(Number(desde))
+            .limit(Number(limite))
+    ]);
     
     res.json({
-        msg: 'Hello get - controller',
-        q,
-        name,
-        edad,
-        page,
-        limit
+        total,
+        users
     });
 
 }
 
-const userPut = (req, res = response) => {
+const userPut = async(req, res = response) => {
 
-    const { id } = req.params.id;
+    const { id } = req.params;
+    const { _id, password, google, email, ...others } = req.body;
 
-    res.json({
-        msg: 'Hello put - controller',
-        id
-    });
+    // TODO: validate against db
+    if( password ) {
+        // Encrypt password
+        const salt = bcryptjs.genSaltSync();
+        others.password = bcryptjs.hashSync( password, salt );
+    }
+
+    const user = await User.findByIdAndUpdate( id, others );
+
+    res.json(user);
 
 }
 
@@ -47,10 +58,14 @@ const userPost = async(req, res = response) => {
 
 }
 
-const userDelete = (req, res = response) => {
+const userDelete = async(req, res = response) => {
+
+    const { id } = req.params;
+
+    const user = await User.findByIdAndUpdate( id, { active: false } );
 
     res.json({
-        msg: 'Hello delete - controller'
+        id
     });
 
 }
