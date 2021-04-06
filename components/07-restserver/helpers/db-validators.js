@@ -24,7 +24,6 @@ const userExistById = async( id ) => {
     }
 }
 
-
 module.exports = {
     rolExist,
     emailExist,
