@@ -3,6 +3,8 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 
 const { validateInputs } = require('../middlewares/validations');
+const { validateJWT } = require('../middlewares/validate-jwt');
+
 const { rolExist, emailExist, userExistById } = require('../helpers/db-validators');
 
 const { userGet,
@@ -38,6 +40,7 @@ router.post('/', [
 
 // Delete endpoint
 router.delete('/:id', [
+    validateJWT,
     check('id', 'Not a valid ID').isMongoId(),
     check('id').custom( userExistById ),
     validateInputs
