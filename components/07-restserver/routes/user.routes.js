@@ -2,8 +2,9 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 
-const { validateInputs } = require('../middlewares/validations');
-const { validateJWT } = require('../middlewares/validate-jwt');
+const { validateInputs, 
+        validateJWT,  
+        hasRole } = require('../middlewares')
 
 const { rolExist, emailExist, userExistById } = require('../helpers/db-validators');
 
@@ -33,7 +34,6 @@ router.post('/', [
     check('password', 'The password is mandatory and must be greater than 6 characters.').isLength({ min: 6 }),
     check('email', 'The input value is not a valid email').isEmail(),
     check('email').custom( emailExist ),
-    // check('role', 'Not is an allowed role').isIn(['ADMIN_ROLE', 'USER_ROLE']),
     check('role').custom( rolExist ),
     validateInputs
 ], userPost);
@@ -41,6 +41,7 @@ router.post('/', [
 // Delete endpoint
 router.delete('/:id', [
     validateJWT,
+    hasRole('ADMIN_ROLE', 'SELLER_ROLE'),
     check('id', 'Not a valid ID').isMongoId(),
     check('id').custom( userExistById ),
     validateInputs
