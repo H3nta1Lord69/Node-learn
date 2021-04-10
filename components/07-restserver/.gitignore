@@ -47,3 +47,4 @@ db.config.js
 .DS_Store
 Thumbs.db
 *.log
+.env
