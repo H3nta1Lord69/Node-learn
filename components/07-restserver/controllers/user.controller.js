@@ -22,7 +22,7 @@ const userGet = async(req = request, res = response) => {
 
 }
 
-const userPut = async(req, res = response) => {
+const userPut = async(req = request, res = response) => {
 
     const { id } = req.params;
     const { _id, password, google, email, ...others } = req.body;
@@ -40,7 +40,7 @@ const userPut = async(req, res = response) => {
 
 }
 
-const userPost = async(req, res = response) => {
+const userPost = async(req = request, res = response) => {
 
     const { name, email, password, role } = req.body;
     const user = new User({ name, email, password, role });
@@ -58,7 +58,7 @@ const userPost = async(req, res = response) => {
 
 }
 
-const userDelete = async(req, res = response) => {
+const userDelete = async( req = request, res = response ) => {
 
     const { id } = req.params;
 
@@ -69,7 +69,7 @@ const userDelete = async(req, res = response) => {
 
 }
 
-const userPatch = (req, res = response) => {
+const userPatch = (req = request, res = response) => {
     
     res.json({
         msg: 'Hello patch - controller'
